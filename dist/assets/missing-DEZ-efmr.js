@@ -1,0 +1,1 @@
+import{C as e,n as t,x as n}from"./controls-B63Cm3l2.js";var r=r=>e(r,n`<div class="wrap loading"><p>Nothing here.</p><p>${t({label:`Home`,href:`#/`})}</p></div>`);export{r as default};

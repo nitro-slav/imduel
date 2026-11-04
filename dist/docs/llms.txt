@@ -12,7 +12,9 @@ IMDuel is a Uniswap v4 hook that plays chess. Every pool that uses it is a **due
 
 A bid is an ordinary buy: you keep the tokens you bought, and the move comes with it. There is no ticket, no deposit and no separate call.
 
-The main duel is **$IMDUEL / $IMD** on Ethereum. Anyone can create a duel of another token against $IMD or $IMDUEL. The contracts have no owner, no admin key, no pause and no upgrade.
+The main duel is **$IMDUEL / $IMD** on Ethereum. Anyone can create a duel of another token against $IMD or $IMDUEL. The hook, the engine and the staking vault have no owner, no admin key, no pause and no upgrade.
+
+$IMDUEL holders can also [stake](#/docs/staking) it for a share of the main duel's trading fees.
 
 IMDuel is experimental. A bigger buy plays a stronger move but guarantees no mate, win or profit, and token prices move. Trade only what you can afford to lose.
 
@@ -104,7 +106,7 @@ Every swap in a duel pays two fees:
 | Fee | Rate | Goes to |
 | --- | --- | --- |
 | Hook fee | 0.75% | 0.65% to the two reward pools, 0.1% burns $IMDUEL (see [Burn](#/docs/burn)) |
-| Pool fee | 1.25% in the main duel | the pool's liquidity: 1% to the launch wallet, 0.25% to the IMD network |
+| Pool fee | 1.25% in the main duel | the pool's liquidity: 1% to the [fee router](#/docs/staking) ($IMDUEL to stakers, $IMD to the team), 0.25% to the IMD network |
 
 A trade in the main duel costs 2% in fees, plus gas and price impact. Other duels charge the same hook fee and the pool fee their creator chose. Every swap emits Uniswap's standard `HookSwap` event with the hook fee, so explorers show the full cost.
 
@@ -141,6 +143,61 @@ $IMDUEL is a team in the main duel and in every duel paired against it, and the 
 0.1% of every swap is taken in $IMDUEL wherever a duel holds $IMDUEL, the main duel included, and burned. A duel paired with $IMD that holds no $IMDUEL takes its 0.1% in $IMD and adds it to the main duel's $IMD reward pool instead.
 
 The burn is owed to `0x…dEaD` in the hook and sent there by anyone calling `withdraw(0x…dEaD, IMDUEL)`. The main duel's page shows the total burned.
+
+## Staking
+
+Stake $IMDUEL in the staking vault and receive **sIMDUEL**, a share of everything the vault holds. The vault pays stakers from a reward reserve, so each sIMDUEL is redeemable for more $IMDUEL over time. There is no lock-up, no fee and nothing to claim: rewards compound into the share value every second, and you can unstake at any time.
+
+The vault is a standard [ERC-4626](https://eips.ethereum.org/EIPS/eip-4626) tokenized vault built on OpenZeppelin's implementation. sIMDUEL is an ERC-20 with 18 decimals and can be transferred like any other token; whoever holds it can redeem it.
+
+### Shares
+
+When you stake, the vault mints sIMDUEL at the current share value: staking 1,000 $IMDUEL while 1 sIMDUEL is worth 1.25 $IMDUEL mints 800 sIMDUEL. The number of shares you hold doesn't change after that; what grows is what each one is worth.
+
+```
+share value = total staked / sIMDUEL supply
+```
+
+**Total staked** is every $IMDUEL deposited plus every reward released so far. The share value only rises: rewards add to the total staked without minting shares, and staking or unstaking moves the total staked and the supply in proportion. As in every ERC-4626 vault, conversions round in the vault's favour, by at most 1 wei.
+
+### The reward reserve
+
+Rewards come from a separate balance in the vault, the **reward reserve**. The reserve is not part of the share value until it is released.
+
+- **Released continuously.** The reserve releases 1% of itself a day, by the second, into the total staked. After `t` days with nothing new arriving it holds `reserve × 0.99^t`, so it halves in about 69 days. It only releases while someone besides the permanent stake is staked; until then it waits.
+- **Refilled by fees.** Any $IMDUEL sent to the vault joins the reserve, not the stake. The main duel's trading fees arrive this way through the fee router, and future features can top it up the same way. `sync()` counts a transfer at once; otherwise it is counted at the next stake or unstake.
+- **Never minted.** Rewards are only ever $IMDUEL that was sent to the vault. Staking creates no new supply.
+
+The reserve started with 10,000,000 $IMDUEL from the launch wallet.
+
+### APR
+
+The staking page shows the current APR: what the reserve releases in a day, over a year, divided by the total staked.
+
+```
+APR = reserve × 1% × 365 / total staked
+```
+
+It is a snapshot, not a promise. It falls as more $IMDUEL is staked and as the reserve pays out, and rises when fees refill the reserve or stakers leave. Because rewards compound into the share value, a stake held for a year at a constant APR would earn slightly more than the APR.
+
+### The permanent stake
+
+The vault opens with 1 $IMDUEL staked on behalf of `0x…dEaD`, from the reserve, the first time `sync()` runs with at least 1 $IMDUEL in it. Those shares can never be redeemed. They keep sIMDUEL in existence at all times, so the vault is never empty, and no first depositor can inflate the share value against those who follow (the ERC-4626 inflation attack). Until the permanent stake exists, the vault accepts no deposits.
+
+The permanent stake earns like any other, in proportion to its size, but only alongside other stakers: while it is the only stake, the reserve pays out nothing and waits for the first staker. Beside a very small stake it takes most of each payout, so the team's 1,000,000 $IMDUEL stays staked, which keeps its share at about a millionth. The staking page counts it as burned.
+
+### The fee router
+
+The main duel's pool fee is 1.25%. The IMD launch factory pays 1% of it to the launch's **requester** and 0.25% to the IMD network. The requester is the IMDuel fee router, which forwards what it receives:
+
+| Token | Goes to |
+| --- | --- |
+| $IMDUEL | the staking vault's reward reserve |
+| $IMD | the team |
+
+Fees accrue in the factory until anyone calls the router's `collect()`, which claims them and forwards both tokens in the same transaction.
+
+The router's admin can hand the requester role to a new address, for example a router with a different split. A handover must be proposed first and can only be carried out 3 days later, within the 3 days after that; a proposal left longer expires and has to be made again. So every change is public in advance through the `Proposed` event. The admin can also call `lock()`, which removes the admin for good and leaves the requester with this router permanently. The admin cannot move funds or touch the vault.
 
 ## Gas
 
@@ -179,6 +236,17 @@ Wallets may show the value you receive as $0 until their price services list a n
 
 A new duel charges the hook fee from its first trade. It must be paired with $IMD or $IMDUEL, so its 0.1% always has somewhere to go; the hook refuses any other pair.
 
+## Staking and unstaking
+
+[Staking](#/staking) has one form for both directions.
+
+1. **Stake.** Enter an amount of $IMDUEL, or press Max. The first stake asks for an approval of the vault, then the deposit; later stakes are a single transaction. The form shows the sIMDUEL you receive, your stake after and what it would earn a day at the current rate.
+2. **Watch it grow.** Your stake is shown in $IMDUEL and updates every second. Nothing needs to be claimed.
+3. **Unstake.** Switch to Unstake and enter an amount of sIMDUEL, or press Max to redeem every share. The $IMDUEL arrives in the same transaction.
+4. **Fill the reserve.** The Reserve tab shows the main duel's fees waiting in the fee router. Anyone can send them on, for the gas alone: the $IMDUEL goes into the reserve for every staker.
+
+The vault's standard ERC-4626 functions also stake for another address (`deposit(assets, receiver)`) and unstake to one (`redeem(shares, receiver, owner)`). Only the holder of sIMDUEL, or an address it approved, can redeem it.
+
 ## Profiles and leaderboard
 
 Every address has a profile at `#/profile/0x…`: press an address anywhere on the site, or rest on it for a summary card. It shows what the hook counts for that address in the main duel (games, moves by piece, pieces taken, checks, castles, promotions, checkmates and amounts won) and the badges those counts earn. Names and avatars come from ENS.
@@ -196,10 +264,12 @@ All on Ethereum mainnet.
 | IMDuelHook | [`0xA92F72DcDd90229C32F6d51229F4cc5c916410CC`](https://etherscan.io/address/0xA92F72DcDd90229C32F6d51229F4cc5c916410CC) |
 | ChessEngineV5 | [`0xc21788F704a8b9456f7391A01d8a3D95Be215a27`](https://etherscan.io/address/0xc21788F704a8b9456f7391A01d8a3D95Be215a27) |
 | $IMDUEL | [`0xc012b8Db13C57beCd950eEfB70540e6f973A3C73`](https://etherscan.io/address/0xc012b8Db13C57beCd950eEfB70540e6f973A3C73) |
+| IMDuelStaking (sIMDUEL) | [`0x8EA92158b116F835a4961baEFc7e1109562DD723`](https://etherscan.io/address/0x8EA92158b116F835a4961baEFc7e1109562DD723) |
+| IMDuelFeeRouter | [`0xf4f9Daec44cC531Abe674184bBe8191024247E23`](https://etherscan.io/address/0xf4f9Daec44cC531Abe674184bBe8191024247E23) |
 | Main duel (pool id) | `0xbb45eacf50b4bd8ce31e0620e14ff6e6b6375d56fce4372d3046f4a02faeae65` |
 | Launch wallet | `0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23` |
 
-Deployed through IMD launch 2843 ([job 4098dafa](https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa)) at block 26,322,077. The deployed source is in [the swarm's launch repository](https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json).
+Deployed through IMD launch 2843 ([job 4098dafa](https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa)) at block 26,322,077. The deployed source is in [the swarm's launch repository](https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json). The staking vault and the fee router were deployed by the launch wallet on 4 November 2026.
 
 ## Integrating
 
@@ -225,13 +295,26 @@ hookData = abi.encode(owner)         // 32 bytes
 
 Events: `GameStarted`, `Bid`, `Moved`, `MatePaid`, `GameOver`, `DrawTriggered`, `EngineFailed`, `Withdrawn`, `ChestFunded`, `MainDuel`, `HookSwap`.
 
+**Staking.** The vault implements ERC-4626 in full, so any integration built for ERC-4626 works with it. Beyond the standard:
+
+| Function | Returns or does |
+| --- | --- |
+| `totalAssets()` | the total staked: deposits plus rewards released so far, as of this block |
+| `reserve()` | the reward reserve not yet released, as of this block |
+| `sync()` | counts $IMDUEL sent to the vault into the reserve; opens the permanent stake on its first run (anyone) |
+| `maxDeposit(address)`, `maxMint(address)` | 0 until the permanent stake exists, then unlimited |
+
+The fee router: `collect()` (anyone) claims the main duel's fees and forwards them; `admin()`, `pending()` and `readyAt()` show who can hand the requester on, to whom and from when (until `readyAt() + NOTICE`, then it expires); `NOTICE` is 3 days. Events: `Proposed(next, readyAt)`, `HandedOn(next)`, `Locked()`. Errors: `NotAdmin`, `NotReady` (no proposal, or its notice still running), `Expired` (propose again), `InvalidSetup` (also for a proposal naming the vault).
+
 ## Security and risks
+
 
 **Audits and testing.**
 
 - IMD swarm audits: [74895075](https://explorer.imd.fun/jobs/74895075-9f30-49e2-8c89-ec79383f8102) on this code (1 low fixed, 1 info documented) and [6acefe89](https://explorer.imd.fun/jobs/6acefe89-1311-462a-8f78-5697050c327d) on an earlier version (every finding fixed). The launch job audited the code again before deploying; its one change, the `NotEnoughGas` check, is in the deployed hook.
 - What the hook holds equals the reward pools plus the burn plus what is owed, in every currency, and every mate pays exactly the smallest of its three limits: checked by invariant tests, symbolic proofs and fuzzing with Foundry and Echidna.
-- No owner, pause or upgrade: the hook and the engine are immutable. If the engine fails, a seeded legal move is played at 0% instead, and if that fails too the game ends in a draw, so a trade never breaks. A hostile token can only affect its own duel.
+- The staking vault and the fee router: IMD swarm audit [d944c9f4](https://explorer.imd.fun/jobs/d944c9f4-820f-4a57-87f6-eca2032d2ede) (2 low fixed, 4 info) and the swarm's review in job [6141f96e](https://explorer.imd.fun/jobs/6141f96e-e23e-4cea-85f6-41c05f34602a) (the `propose()` low fixed), after four rounds of our own review, the last a red team with flash loans on a mainnet fork. They are covered by invariant tests and symbolic proofs with Halmos (every $IMDUEL the vault holds is staked or in the reserve; time, stakes and unstakes never lower the share value; the permanent stake never leaves), mutation testing and fork tests against the live IMD factory.
+- No owner, pause or upgrade: the hook, the engine and the staking vault are immutable. If the engine fails, a seeded legal move is played at 0% instead, and if that fails too the game ends in a draw, so a trade never breaks. A hostile token can only affect its own duel.
 
 **Known limits.**
 
@@ -243,3 +326,6 @@ Events: `GameStarted`, `Bid`, `Moved`, `MatePaid`, `GameOver`, `DrawTriggered`, 
 - **Quiet duels.** A move must be played within about a day (8,191 blocks) of its window closing, while its block hash is still on chain. After that it is drawn again, owned by nobody, at its bid's strength.
 - **Throwing games.** A team can lose on purpose, but every move costs fees and the prize comes out of its own pool, so it loses money doing it.
 - **Relayed trades.** A trade relayed for a smart-contract wallet without the owner in `hookData` credits the wallet that signed it.
+- **Staking rewards depend on fees.** The reserve only refills while the main duel trades. Without new fees it keeps releasing 1% of what is left each day, so rewards shrink but never stop at once, and the share value never falls.
+- **Staking is not a hedge.** A stake is counted in $IMDUEL; its dollar value moves with the $IMDUEL price.
+- **The fee router's admin.** Until `lock()` is called, the admin can redirect the main duel's 1% to a new address, after a public 3-day notice. It has no power over the vault or anything staked.

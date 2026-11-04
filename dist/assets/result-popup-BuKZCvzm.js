@@ -1,0 +1,4 @@
+import{C as e,n as t,x as n}from"./controls-B63Cm3l2.js";function r(n){e(n,t({label:``,tone:`ink`,size:`lg`,disabled:!0}));let r=n.querySelector(`button`),i=r.querySelector(`.key-label`);return(e,t,n,a,o=``)=>{i.textContent!==e&&(i.textContent=e),r.disabled=t,n?r.setAttribute(`aria-busy`,`true`):r.removeAttribute(`aria-busy`);for(let e of[`buy`,`add`,`approve`])e===a?r.dataset[e]!==o&&(r.dataset[e]=o):e in r.dataset&&delete r.dataset[e]}}var i=(e,r)=>n`<div class="result-popup is-${e.level}" role="alertdialog" aria-label="${r}">
+  <strong class="result-popup-title">${r}</strong><p>${e.text}</p>
+  <div class="result-popup-actions">${e.href?n`<a class="text-link" href="${e.href}" target="_blank" rel="noopener">View the transaction</a>`:n`<span></span>`}${t({label:`Close`,size:`sm`,data:{"result-close":``}})}</div>
+</div>`;export{r as n,i as t};
