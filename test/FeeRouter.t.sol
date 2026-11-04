@@ -181,6 +181,15 @@ contract FeeRouterTest is Test {
         router.handOn();
     }
 
+    /// The deploy job's low (6141f96e): the vault can't be proposed, as it can't be the team (its IMD would be stuck).
+    function test_theVaultCantBeProposed() public {
+        _handOver();
+        vm.prank(admin);
+        vm.expectRevert(IMDuelFeeRouter.InvalidSetup.selector);
+        router.propose(address(vault));
+        assertEq(router.pending(), address(0));
+    }
+
     /// The swarm audit's second low (job d944c9f4): a proposal is good for NOTICE once it has waited one out; a stale
     /// one gives no fresh notice, so it must be proposed again (and waited out again).
     function test_aStaleProposalExpires() public {

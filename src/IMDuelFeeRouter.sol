@@ -82,9 +82,11 @@ contract IMDuelFeeRouter {
     }
 
     /// Proposes `next` as the launch's requester, ready after NOTICE and for NOTICE after that (then it must be
-    /// proposed again); a new proposal restarts the notice, and address 0 withdraws it.
+    /// proposed again); a new proposal restarts the notice, and address 0 withdraws it. Never the vault: the IMD it
+    /// would be paid could never leave it.
     function propose(address next) external {
         _onlyAdmin();
+        if (next == vault) revert InvalidSetup();
         uint64 at = next == address(0) ? 0 : uint64(block.timestamp + NOTICE);
         (pending, readyAt) = (next, at);
         emit Proposed(next, at);
