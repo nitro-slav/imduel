@@ -30,6 +30,13 @@
         "currency1": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
         "decimals0": 18,
         "decimals1": 18
+      },
+      {
+        "poolId": "0xbb45eacf50b4bd8ce31e0620e14ff6e6b6375d56fce4372d3046f4a02faeae65",
+        "currency0": "0xc012b8db13c57becd950eefb70540e6f973a3c73",
+        "currency1": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+        "decimals0": 18,
+        "decimals1": 18
       }
     ]
   },
