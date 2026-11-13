@@ -1,0 +1,53 @@
+{
+  "kind": "evm_contracts",
+  "contracts": [
+    {
+      "contract": "SwarmRules",
+      "constructorArgs": []
+    },
+    {
+      "contract": "SwarmLedger",
+      "constructorArgs": []
+    },
+    {
+      "contract": "MainDuelBuyer",
+      "constructorArgs": [
+        "0x000000000004444c5dc75cB358380D2e3dE08A90",
+        "0xc012b8Db13C57beCd950eEfB70540e6f973A3C73",
+        "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+        "12500",
+        "60",
+        "0xA92F72DcDd90229C32F6d51229F4cc5c916410CC"
+      ]
+    },
+    {
+      "contract": "SwarmDuel",
+      "constructorArgs": [
+        "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+        "0xc012b8Db13C57beCd950eEfB70540e6f973A3C73",
+        "$contract:SwarmRules",
+        "0xc21788F704a8b9456f7391A01d8a3D95Be215a27",
+        "$contract:MainDuelBuyer",
+        "0x8EA92158b116F835a4961baEFc7e1109562DD723",
+        "0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23",
+        "0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23",
+        "1794762000"
+      ],
+      "libraries": {
+        "SwarmLedger": "$contract:SwarmLedger"
+      }
+    },
+    {
+      "contract": "SwarmOracle",
+      "constructorArgs": [
+        "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+        "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+        "0x5598aa9146215bc13eb26f2c692ad1461fd32982",
+        "$contract:SwarmDuel",
+        "$contract:SwarmRules",
+        "500000000000000000"
+      ]
+    }
+  ],
+  "notes": "Swarm Duel on Ethereum (chain 1), beside the live main duel (IMD launch 2843; hook 0xA92F72DcDd90229C32F6d51229F4cc5c916410CC) and the staking vault 0x8EA92158b116F835a4961baEFc7e1109562DD723. SwarmRules: stateless chess. SwarmLedger: an external library SwarmDuel links. MainDuelBuyer: buys $IMDUEL (0xc012b8Db13C57beCd950eEfB70540e6f973A3C73) with IMD (0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7) in the main duel's pool (v4 PoolManager 0x000000000004444c5dc75cB358380D2e3dE08A90, fee 12500, tick spacing 60), at most one fee of price rise a buy; no owner. SwarmDuel: IMD, $IMDUEL, the rules, the live engine 0xc21788F704a8b9456f7391A01d8a3D95Be215a27, the buyer, the vault, the team (the launch wallet 0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23) and the deployer (the launch wallet); its constructor checks every address has code, the buyer's tokens, the vault's asset and the rules' odds. SwarmOracle: IMD's Intake v2 0xa43e6f75ee006411f79ac1c84120606c2330de82, IMD, IMD's attester 0x5598aa9146215bc13eb26f2c692ad1461fd32982, SwarmDuel as its client, the rules, 0.5 IMD a question. After the five, the deployer calls SwarmDuel.open(SwarmOracle), which opens game 1. Deployed by the launch wallet from the ops page, every step signed by the user. SwarmDuel's last argument is its launch time (unix seconds, UTC): no deposit before it; Sunday 15 November 2026, 17:00 UTC (18:00 UTC+1, 12:00 US East; user, 2026-11-13); the launch refuses a time that isn't ahead."
+}
