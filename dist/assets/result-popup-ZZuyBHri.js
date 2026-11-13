@@ -1,0 +1,4 @@
+import{C as e,T as t,n}from"./controls-KpvRSo0d.js";function r(e){t(e,n({label:``,tone:`ink`,size:`lg`,disabled:!0}));let r=e.querySelector(`button`),i=r.querySelector(`.key-label`);return(e,t,n,a,o=``)=>{i.textContent!==e&&(i.textContent=e),r.disabled=t,n?r.setAttribute(`aria-busy`,`true`):r.removeAttribute(`aria-busy`);for(let e of[`buy`,`add`,`approve`])e===a?r.dataset[e]!==o&&(r.dataset[e]=o):e in r.dataset&&delete r.dataset[e]}}var i=(t,r)=>e`<div class="result-popup is-${t.level}" role="alertdialog" aria-label="${r}">
+  <strong class="result-popup-title">${r}</strong><p>${t.text}</p>
+  <div class="result-popup-actions">${t.href?e`<a class="text-link" href="${t.href}" target="_blank" rel="noopener noreferrer">View the transaction</a>`:e`<span></span>`}${n({label:`Close`,size:`sm`,data:{"result-close":``}})}</div>
+</div>`;export{r as n,i as t};

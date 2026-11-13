@@ -1,0 +1,1 @@
+import{C as e,T as t,n}from"./controls-KpvRSo0d.js";var r=r=>t(r,e`<div class="wrap loading"><p>Nothing here.</p><p>${n({label:`Home`,href:`#/`})}</p></div>`);export{r as default};
