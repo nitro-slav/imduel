@@ -1,4 +1,4 @@
-import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,it as o}from"./discovery-C9aQzwXW.js";/* empty css                 */import{t as s}from"./page-title-m8iPn7mB.js";import{t as c}from"./chessboard-C6O4LCoo.js";function l(t,a){let o=e`${t.toc.map(t=>e`<p class="label docs-group">${t.group}</p><ul>${t.sections.map(t=>e`<li><a class="${i(`docs-link`,{"is-on":t.id===a})}" href="#/docs/${t.id}" data-docs-link="${t.id}">${t.title}</a></li>`)}</ul>`)}`;return e`<div class="docs">
+import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,it as o}from"./discovery-C9aQzwXW.js";/* empty css                 */import{t as s}from"./page-title-m8iPn7mB.js";import{t as c}from"./chessboard-kLts2rXv.js";function l(t,a){let o=e`${t.toc.map(t=>e`<p class="label docs-group">${t.group}</p><ul>${t.sections.map(t=>e`<li><a class="${i(`docs-link`,{"is-on":t.id===a})}" href="#/docs/${t.id}" data-docs-link="${t.id}">${t.title}</a></li>`)}</ul>`)}`;return e`<div class="docs">
     <nav class="docs-nav" aria-label="Contents"><details class="docs-contents" open data-docs-contents><summary class="label">Contents</summary>${o}</details></nav>
     <article class="docs-body">
       <div class="docs-tools">${n({label:`Copy page as Markdown`,size:`sm`,data:{"docs-copy":``}})}<a class="text-link" href="docs/llms.txt" target="_blank" rel="noopener">llms.txt</a></div>
@@ -16,6 +16,7 @@ import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,
 <p>A bid is an ordinary buy: you keep the tokens you bought, and the move comes with it. There is no ticket, no deposit and no separate call.</p>
 <p>The main duel is <strong>$IMDUEL / $IMD</strong> on Ethereum. Anyone can create a duel of another token against $IMD or $IMDUEL. The hook, the engine and the staking vault have no owner, no admin key, no pause and no upgrade.</p>
 <p>$IMDUEL holders can also <a href="#/docs/staking">stake</a> it for a share of the main duel&#39;s trading fees.</p>
+<p><a href="#/docs/swarm-duel">Swarm Duel</a> is a second game: people play White against the $IMD swarm, seven AI agents, one move every 24 hours, for a jackpot in $IMDUEL.</p>
 <p>IMDuel is experimental. A bigger buy plays a stronger move but guarantees no mate, win or profit, and token prices move. Trade only what you can afford to lose.</p>
 <h2 id="quick-start"><a class="docs-anchor" href="#/docs/quick-start" aria-label="Link to this section">#</a>Quick start</h2>
 <ol>
@@ -235,6 +236,132 @@ import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,
 </tbody></table>
 <p>The trade that plays a move runs the engine, so it costs more, whoever sends it. This site sends every trade with a gas limit of 5,000,000, and you pay only for the gas used.</p>
 <p>Other apps estimate gas when you confirm, and bidding can close between that estimate and the block your trade lands in; then your trade is the one that plays the move. It must have the engine&#39;s full 3,000,000 gas on hand, or it reverts with <code>NotEnoughGas</code> instead of playing a weaker move: only the gas is spent, and it can be sent again with a higher limit. Integrations should send every trade with at least 5,000,000.</p>
+<h2 id="swarm-duel"><a class="docs-anchor" href="#/docs/swarm-duel" aria-label="Link to this section">#</a>Swarm Duel</h2>
+<p><a href="#/swarm">Swarm Duel</a> is a chess game between people and the <strong>$IMD swarm</strong>: seven AI agents on the <a href="https://imd.fun">IMD network</a>. People play White and the swarm plays Black, one move a turn, and every turn lasts 24 hours.</p>
+<ul>
+<li><strong>Bid $IMD on White&#39;s next move.</strong> The highest bid when the turn closes is the move that is played.</li>
+<li><strong>The swarm answers.</strong> Its agents each vote on Black&#39;s reply, and the move is played once three of them agree.</li>
+<li><strong>Every other bid becomes shares.</strong> Shares earn 60% of the $IMD that goes into the game after them.</li>
+<li><strong>Checkmate the swarm to win the jackpot.</strong> The jackpot is held in $IMDUEL and grows with every bid.</li>
+</ul>
+<p>Bidding opens at the launch time, Sunday 15 November 2026, 17:00 UTC; until then a bid reverts with <code>NotOpen</code>. Games follow one another without a break, and the jackpot carries over from game to game.</p>
+<p>Swarm Duel is experimental, like the rest of IMDuel. Shares and prizes depend on what other players bid, the jackpot is held in $IMDUEL and moves with its price, and nothing guarantees a win. Bid only what you can afford to lose.</p>
+<h3 id="quick-start-2"><a class="docs-anchor" href="#/docs/quick-start-2" aria-label="Link to this section">#</a>Quick start</h3>
+<ol>
+<li><strong>Get $IMD and some ETH for gas.</strong> $IMD trades on Uniswap against ETH. The Play panel can also pay with ETH: it swaps the ETH for $IMD first, then bids.</li>
+<li><strong>Open <a href="#/swarm">Swarm</a> and connect.</strong> The board shows the game, the countdown shows when the turn closes, and <strong>Bids this turn</strong> lists every bid.</li>
+<li><strong>Pick a move and an amount.</strong> Drag a piece on the board, or tick <strong>Autoplay</strong> to bid on the engine&#39;s best move. The panel says whether your bid would be the highest and what each outcome pays.</li>
+<li><strong>Confirm.</strong> The first bid asks for an approval of $IMD, then the bid.</li>
+<li><strong>Claim.</strong> When the turn closes, your Claim key shows what is yours. If your bid won, Claim plays the move as well.</li>
+</ol>
+<h2 id="turns"><a class="docs-anchor" href="#/docs/turns" aria-label="Link to this section">#</a>Turns</h2>
+<p>A turn is the 24 hours in which people choose White&#39;s next move.</p>
+<ul>
+<li><strong>The first turn</strong> of a game starts with its first bid. Each later turn starts when the swarm&#39;s move is played.</li>
+<li><strong>The last hour.</strong> A highest bid placed in the last hour of a turn moves its end to an hour after that bid, so the other bidders can always answer.</li>
+<li><strong>No bid, no move.</strong> A turn without a bid stays open until someone bids; there is no forfeit.</li>
+</ul>
+<h3 id="bids"><a class="docs-anchor" href="#/docs/bids" aria-label="Link to this section">#</a>Bids</h3>
+<p>A bid is $IMD on one legal move for White, at least 2 $IMD.</p>
+<ul>
+<li><strong>The highest bid</strong> leads the turn. To take the lead, a bid must be more than 10% above the highest bid. A smaller bid, or a bid with no move, buys shares straight away.</li>
+<li><strong>Outbid.</strong> When a bid is outbid, its whole amount buys shares at that moment. Outbidding your own bid works the same way: the old one becomes shares.</li>
+<li><strong>Bids are final.</strong> A bid can&#39;t be withdrawn; it either wins the move or becomes shares.</li>
+</ul>
+<h3 id="closing-the-turn"><a class="docs-anchor" href="#/docs/closing-the-turn" aria-label="Link to this section">#</a>Closing the turn</h3>
+<p>When the turn&#39;s 24 hours are up, the next transaction closes it: the winner&#39;s Claim, any other claim, a bid, or anyone&#39;s <code>advance()</code>. Closing plays the winning bid&#39;s move and puts Black&#39;s position to the swarm. Nobody needs to keep watch: the move winner&#39;s own Claim closes the turn and pays them in one transaction.</p>
+<h3 id="the-swarm-s-move"><a class="docs-anchor" href="#/docs/the-swarm-s-move" aria-label="Link to this section">#</a>The swarm&#39;s move</h3>
+<p>When the turn closes, SwarmDuel asks the swarm through IMD&#39;s oracle (the Intake), paying 0.5 $IMD out of the winning bid&#39;s payment. The question gives the agents the game so far, the board and every legal move, and tells them to decide by their own reasoning, with no chess engine or opening book. Once three of them agree, IMD signs the answer, usually within two minutes, and SwarmOracle checks the signature and the question before passing the move on. The next transaction plays it (a bid plays it first), and the next turn&#39;s 24 hours start from the moment the answer arrived.</p>
+<p>If the swarm can&#39;t answer (no agreement, no answer within an hour, or a refused question), the onchain engine plays Black&#39;s move at full strength instead, from two blocks after the turn closed, so its move can&#39;t be chosen by whoever closes the turn; the next turn starts when it is played. After three failures in a row the swarm is asked only every eighth turn until it answers again; the engine plays the turns in between. Either way the game never stops.</p>
+<p>The Lab, below the board, shows every vote of every swarm move, each graded against Stockfish.</p>
+<h2 id="swarm-money"><a class="docs-anchor" href="#/docs/swarm-money" aria-label="Link to this section">#</a>Swarm money</h2>
+<h3 id="winning-a-move"><a class="docs-anchor" href="#/docs/winning-a-move" aria-label="Link to this section">#</a>Winning a move</h3>
+<p>The move winner pays <strong>20% of their bid, at least 2 $IMD</strong>, and gets the rest back. On top of that:</p>
+<ul>
+<li><strong>The turn prize:</strong> 1% of the jackpot, in $IMDUEL.</li>
+<li><strong>Shares:</strong> the payment buys shares, like any other $IMD that goes in.</li>
+<li><strong>The checkmate prize</strong>, if people mate the swarm: one part for every move won in that game.</li>
+</ul>
+<p>Example: a winning bid of 10 $IMD pays 2 $IMD and gets 8 $IMD back. A winning bid of 50 $IMD pays 10 $IMD and gets 40 $IMD back.</p>
+<h3 id="shares-and-dividends"><a class="docs-anchor" href="#/docs/shares-and-dividends" aria-label="Link to this section">#</a>Shares and dividends</h3>
+<p>Every bid that isn&#39;t played turns into shares: a bid with no move, a bid too small to lead, and every outbid bid. <strong>Dividends</strong> are 60% of the $IMD that goes into the game: every share bought, every outbid bid and every winning bid&#39;s payment. They are paid when each turn closes, to every share in the game at that moment, in proportion to the shares held.</p>
+<ul>
+<li><strong>Shares get dearer as the game goes on.</strong> Their price rises with the move number and with the $IMD already in the game, so the same amount buys more shares early.</li>
+<li><strong>A game&#39;s shares earn only from that game.</strong> When a game ends, its shares stop earning; what they earned stays claimable.</li>
+<li><strong>Claim any time.</strong> Dividends build up as turns close, and Claim pays them in $IMD.</li>
+</ul>
+<h3 id="the-jackpot"><a class="docs-anchor" href="#/docs/the-jackpot" aria-label="Link to this section">#</a>The jackpot</h3>
+<p>The jackpot is $IMDUEL held by SwarmDuel, bought with part of every bid.</p>
+<ul>
+<li><strong>Each turn</strong> pays 1% of it to the move winner, as the turn prize.</li>
+<li><strong>When people checkmate the swarm</strong>, 80% of it is split equally over the White moves played in that game, one part per move, so a move winner gets one part for every move they won. The other 20% stays for the next game.</li>
+<li><strong>When the swarm wins, or the game is drawn</strong>, nothing more is paid: the jackpot carries on into the next game.</li>
+</ul>
+<p>The jackpot also holds shares of its own in each game (the same as 10 $IMD of shares at the start), so a part of each game&#39;s dividends flows into it. Draws follow the main duel&#39;s rules: stalemate, too few pieces to mate, a third repetition within the last sixteen half-moves, 60 half-moves without a capture or pawn move, or 200 half-moves in total.</p>
+<h3 id="where-every-imd-goes"><a class="docs-anchor" href="#/docs/where-every-imd-goes" aria-label="Link to this section">#</a>Where every $IMD goes</h3>
+<p>Each $IMD that goes in (shares, an outbid bid, or a winning bid&#39;s payment after the swarm&#39;s question) is split:</p>
+<table>
+<thead>
+<tr>
+<th>Share</th>
+<th>Goes to</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>60%</td>
+<td>dividends, to the game&#39;s shares</td>
+</tr>
+<tr>
+<td>36%</td>
+<td>the jackpot, bought as $IMDUEL (33% when the bid came through a ref link)</td>
+</tr>
+<tr>
+<td>3%</td>
+<td>stakers, bought as $IMDUEL and sent to the <a href="#/docs/staking">staking vault</a></td>
+</tr>
+<tr>
+<td>3%</td>
+<td>the referrer, when the bid came through a ref link</td>
+</tr>
+<tr>
+<td>1%</td>
+<td>the team</td>
+</tr>
+</tbody></table>
+<p>The $IMDUEL is bought on the main duel&#39;s pool, at most 20 $IMD at a time, once a block, by the bids and claims that follow; the $IMD waits in SwarmDuel until then. Each buy is a real main-duel trade, so it can also bid for $IMDUEL&#39;s next move there.</p>
+<h3 id="ref-links"><a class="docs-anchor" href="#/docs/ref-links" aria-label="Link to this section">#</a>Ref links</h3>
+<p>Every connected wallet has a <strong>ref link</strong>: the Swarm page with <code>?ref=</code> and its address. Bids made through it pay 3% of their split to that address, out of the jackpot&#39;s part, so the bidder pays nothing extra. A visitor&#39;s first ref link counts for 30 days. The page&#39;s Referrals card shows what a link has earned and claims it.</p>
+<h2 id="odds"><a class="docs-anchor" href="#/docs/odds" aria-label="Link to this section">#</a>Odds</h2>
+<p>When people go a long time without a win, the swarm starts the next game with pieces missing: one more piece for every 30 White moves since people last won, up to four.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>The swarm starts without</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>nothing (an even game)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>the f7 pawn</td>
+</tr>
+<tr>
+<td>2</td>
+<td>and the b8 knight</td>
+</tr>
+<tr>
+<td>3</td>
+<td>and the a8 rook</td>
+</tr>
+<tr>
+<td>4</td>
+<td>and the queen</td>
+</tr>
+</tbody></table>
+<p>A win by people starts the next game at level 0 again.</p>
 <h2 id="trading"><a class="docs-anchor" href="#/docs/trading" aria-label="Link to this section">#</a>Trading</h2>
 <p>The site trades through Uniswap&#39;s own contracts, the Universal Router and Permit2.</p>
 <ol>
@@ -295,6 +422,26 @@ import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,
 <td><a href="https://etherscan.io/address/0xf4f9Daec44cC531Abe674184bBe8191024247E23"><code>0xf4f9Daec44cC531Abe674184bBe8191024247E23</code></a></td>
 </tr>
 <tr>
+<td>SwarmDuel</td>
+<td><a href="https://etherscan.io/address/0x7e822CC46D1f19A8cB69d46c954b1aEB72595DD2"><code>0x7e822CC46D1f19A8cB69d46c954b1aEB72595DD2</code></a></td>
+</tr>
+<tr>
+<td>SwarmOracle</td>
+<td><a href="https://etherscan.io/address/0xFbd1f85ea9EA14432AB3aDe43D2FF01BF752CcEA"><code>0xFbd1f85ea9EA14432AB3aDe43D2FF01BF752CcEA</code></a></td>
+</tr>
+<tr>
+<td>SwarmRules</td>
+<td><a href="https://etherscan.io/address/0x61e24d6D133b2924AD0B50e9656c00d24a1b75dA"><code>0x61e24d6D133b2924AD0B50e9656c00d24a1b75dA</code></a></td>
+</tr>
+<tr>
+<td>SwarmLedger</td>
+<td><a href="https://etherscan.io/address/0x88B3D26edfD7C7310fc9864bed8E26552A373385"><code>0x88B3D26edfD7C7310fc9864bed8E26552A373385</code></a></td>
+</tr>
+<tr>
+<td>MainDuelBuyer</td>
+<td><a href="https://etherscan.io/address/0x23D07A8c019a3bE82A7A78f1899723E12e27035E"><code>0x23D07A8c019a3bE82A7A78f1899723E12e27035E</code></a></td>
+</tr>
+<tr>
 <td>Main duel (pool id)</td>
 <td><code>0xbb45eacf50b4bd8ce31e0620e14ff6e6b6375d56fce4372d3046f4a02faeae65</code></td>
 </tr>
@@ -303,7 +450,7 @@ import{C as e,T as t,n,w as r,x as i}from"./controls-KpvRSo0d.js";import{R as a,
 <td><code>0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23</code></td>
 </tr>
 </tbody></table>
-<p>Deployed through IMD launch 2843 (<a href="https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa">job 4098dafa</a>) at block 26,322,077. The deployed source is in <a href="https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json">the swarm&#39;s launch repository</a>. The staking vault and the fee router were deployed by the launch wallet on 4 November 2026.</p>
+<p>Deployed through IMD launch 2843 (<a href="https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa">job 4098dafa</a>) at block 26,322,077. The deployed source is in <a href="https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json">the swarm&#39;s launch repository</a>. The staking vault and the fee router were deployed by the launch wallet on 4 November 2026, and the Swarm Duel contracts on 13 November 2026 (SwarmDuel at block 26,407,200). The source of every contract here is verified on <a href="https://sourcify.dev">Sourcify</a>.</p>
 <h2 id="integrating"><a class="docs-anchor" href="#/docs/integrating" aria-label="Link to this section">#</a>Integrating</h2>
 <p><strong>Trading.</strong> Any router or aggregator can trade a duel, and every buy bids. The owner of a bid is the address in <code>hookData</code>, 20 bytes packed or 32 bytes ABI-encoded; without it, the owner is the wallet that signed the transaction. Pass it for smart-contract wallets and relayed trades, where the signer isn&#39;t the trader. Gas limits: see <a href="#/docs/gas">Gas</a>.</p>
 <pre class="docs-code"><code>hookData = abi.encodePacked(owner)   // 20 bytes
@@ -376,12 +523,51 @@ hookData = abi.encode(owner)         // 32 bytes</code></pre>
 </tr>
 </tbody></table>
 <p>The fee router: <code>collect()</code> (anyone) claims the main duel&#39;s fees and forwards them; <code>admin()</code>, <code>pending()</code> and <code>readyAt()</code> show who can hand the requester on, to whom and from when (until <code>readyAt() + NOTICE</code>, then it expires); <code>NOTICE</code> is 3 days. Events: <code>Proposed(next, readyAt)</code>, <code>HandedOn(next)</code>, <code>Locked()</code>. Errors: <code>NotAdmin</code>, <code>NotReady</code> (no proposal, or its notice still running), <code>Expired</code> (propose again), <code>InvalidSetup</code> (also for a proposal naming the vault).</p>
+<p><strong>Swarm Duel.</strong> SwarmDuel takes $IMD by approval. A move is a <code>uint16</code>, <code>from * 64 + to</code>, with squares numbered a1 = 0 to h8 = 63 (a pawn always promotes to a queen); <code>0</code> means no move.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns or does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>deposit(amount, move, referrer)</code></td>
+<td>a bid (a move, at least 2 $IMD) or shares (move <code>0</code>); returns the position id; <code>referrer</code> is a ref link&#39;s address or zero</td>
+</tr>
+<tr>
+<td><code>claim(ids)</code></td>
+<td>closes a due turn first, then pays the caller&#39;s positions: dividends and refunds in $IMD, prizes in $IMDUEL</td>
+</tr>
+<tr>
+<td><code>claimReferrals()</code></td>
+<td>pays what the caller earned through ref links</td>
+</tr>
+<tr>
+<td><code>advance()</code></td>
+<td>anyone: plays a waiting swarm or engine move, or closes a due turn</td>
+</tr>
+<tr>
+<td><code>game()</code>, <code>lead()</code>, <code>jackpot()</code></td>
+<td>the board and turn, the highest bid, the jackpot in $IMDUEL</td>
+</tr>
+<tr>
+<td><code>owed(id)</code>, <code>positions(id)</code>, <code>quote(x)</code></td>
+<td>what a position can claim, the position, the shares <code>x</code> $IMD would buy now</td>
+</tr>
+<tr>
+<td><code>launchAt()</code>, <code>TURN()</code>, <code>MIN_BID()</code>, <code>RAISE_PCT()</code></td>
+<td>the launch time, 24 hours, 2 $IMD, 10</td>
+</tr>
+</tbody></table>
+<p>Events: <code>Deposited</code>, <code>Converted</code>, <code>Settled</code>, <code>Moved</code>, <code>Asked</code>, <code>Answered</code>, <code>Fallback</code>, <code>GameOver</code>, <code>GameStarted</code>, <code>Claimed</code>, <code>Bought</code>, <code>Referrer</code>, <code>ReferralClaimed</code>. Send a deposit or <code>advance()</code> with plenty of gas (this site uses 9,000,000 and 14,000,000; only the gas used is paid): either may run a buy of $IMDUEL, which is skipped when the gas runs short.</p>
 <h2 id="security-and-risks"><a class="docs-anchor" href="#/docs/security-and-risks" aria-label="Link to this section">#</a>Security and risks</h2>
 <p><strong>Audits and testing.</strong></p>
 <ul>
 <li>IMD swarm audits: <a href="https://explorer.imd.fun/jobs/74895075-9f30-49e2-8c89-ec79383f8102">74895075</a> on this code (1 low fixed, 1 info documented) and <a href="https://explorer.imd.fun/jobs/6acefe89-1311-462a-8f78-5697050c327d">6acefe89</a> on an earlier version (every finding fixed). The launch job audited the code again before deploying; its one change, the <code>NotEnoughGas</code> check, is in the deployed hook.</li>
 <li>What the hook holds equals the reward pools plus the burn plus what is owed, in every currency, and every mate pays exactly the smallest of its three limits: checked by invariant tests, symbolic proofs and fuzzing with Foundry and Echidna.</li>
 <li>The staking vault and the fee router: IMD swarm audit <a href="https://explorer.imd.fun/jobs/d944c9f4-820f-4a57-87f6-eca2032d2ede">d944c9f4</a> (2 low fixed, 4 info) and the swarm&#39;s review in job <a href="https://explorer.imd.fun/jobs/6141f96e-e23e-4cea-85f6-41c05f34602a">6141f96e</a> (the <code>propose()</code> low fixed), after four rounds of our own review, the last a red team with flash loans on a mainnet fork. They are covered by invariant tests and symbolic proofs with Halmos (every $IMDUEL the vault holds is staked or in the reserve; time, stakes and unstakes never lower the share value; the permanent stake never leaves), mutation testing and fork tests against the live IMD factory.</li>
+<li>Swarm Duel: IMD swarm audit <a href="https://explorer.imd.fun/jobs/0330ab9f-926a-490d-b551-46306454710e">0330ab9f</a> on the deployed code (5 low, 1 info; none needed a change to the deployed contracts), after several rounds of our own reviews; the last, by specialists working on a mainnet fork, found one high issue (a sandwich on the jackpot&#39;s buys), fixed by buying at most 20 $IMD at a time. What SwarmDuel holds covers everything it owes, in $IMD and $IMDUEL, after every action: checked by invariant tests against an exact model of the money, with fork tests through IMD&#39;s live Intake and the main duel&#39;s pool.</li>
 <li>No owner, pause or upgrade: the hook, the engine and the staking vault are immutable. If the engine fails, a seeded legal move is played at 0% instead, and if that fails too the game ends in a draw, so a trade never breaks. A hostile token can only affect its own duel.</li>
 </ul>
 <p><strong>Known limits.</strong></p>
@@ -397,6 +583,11 @@ hookData = abi.encode(owner)         // 32 bytes</code></pre>
 <li><strong>Staking rewards depend on fees.</strong> The reserve only refills while the main duel trades. Without new fees it keeps releasing 1% of what is left each day, so rewards shrink but never stop at once, and the share value never falls.</li>
 <li><strong>Staking is not a hedge.</strong> A stake is counted in $IMDUEL; its dollar value moves with the $IMDUEL price.</li>
 <li><strong>The fee router&#39;s admin.</strong> Until <code>lock()</code> is called, the admin can redirect the main duel&#39;s 1% to a new address, after a public 3-day notice. It has no power over the vault or anything staked.</li>
+<li><strong>The swarm is AI agents.</strong> It plays real chess but can miss tactics, and nothing about its strength is guaranteed either way. Players may use any tool; the swarm is asked not to.</li>
+<li><strong>Swarm Duel depends on IMD.</strong> If IMD&#39;s agents don&#39;t answer within an hour, the onchain engine plays Black&#39;s move instead, so a game never stops; the swarm itself can&#39;t be replaced mid-game.</li>
+<li><strong>SwarmDuel&#39;s deployer.</strong> The launch wallet can name a new oracle for the swarm&#39;s questions, after a public 3-day notice (<code>OracleProposed</code>), taking effect only when a new game starts; or give up that power for good with <code>renounce()</code>. It has no power over funds, bids or the board.</li>
+<li><strong>Swarm shares earn only from their own game.</strong> A game that ends quickly leaves its shares little time to earn.</li>
+<li><strong>The jackpot trails the bids.</strong> Its $IMDUEL is bought at most 20 $IMD at a time, so after a busy turn part of it is still $IMD waiting to be bought.</li>
 </ul>
 `,markdown:`# IMDuel docs
 
@@ -415,6 +606,8 @@ A bid is an ordinary buy: you keep the tokens you bought, and the move comes wit
 The main duel is **$IMDUEL / $IMD** on Ethereum. Anyone can create a duel of another token against $IMD or $IMDUEL. The hook, the engine and the staking vault have no owner, no admin key, no pause and no upgrade.
 
 $IMDUEL holders can also [stake](#/docs/staking) it for a share of the main duel's trading fees.
+
+[Swarm Duel](#/docs/swarm-duel) is a second game: people play White against the $IMD swarm, seven AI agents, one move every 24 hours, for a jackpot in $IMDUEL.
 
 IMDuel is experimental. A bigger buy plays a stronger move but guarantees no mate, win or profit, and token prices move. Trade only what you can afford to lose.
 
@@ -610,6 +803,119 @@ The trade that plays a move runs the engine, so it costs more, whoever sends it.
 
 Other apps estimate gas when you confirm, and bidding can close between that estimate and the block your trade lands in; then your trade is the one that plays the move. It must have the engine's full 3,000,000 gas on hand, or it reverts with \`NotEnoughGas\` instead of playing a weaker move: only the gas is spent, and it can be sent again with a higher limit. Integrations should send every trade with at least 5,000,000.
 
+<!-- group: Swarm Duel -->
+
+## Swarm Duel
+
+[Swarm Duel](#/swarm) is a chess game between people and the **$IMD swarm**: seven AI agents on the [IMD network](https://imd.fun). People play White and the swarm plays Black, one move a turn, and every turn lasts 24 hours.
+
+- **Bid $IMD on White's next move.** The highest bid when the turn closes is the move that is played.
+- **The swarm answers.** Its agents each vote on Black's reply, and the move is played once three of them agree.
+- **Every other bid becomes shares.** Shares earn 60% of the $IMD that goes into the game after them.
+- **Checkmate the swarm to win the jackpot.** The jackpot is held in $IMDUEL and grows with every bid.
+
+Bidding opens at the launch time, Sunday 15 November 2026, 17:00 UTC; until then a bid reverts with \`NotOpen\`. Games follow one another without a break, and the jackpot carries over from game to game.
+
+Swarm Duel is experimental, like the rest of IMDuel. Shares and prizes depend on what other players bid, the jackpot is held in $IMDUEL and moves with its price, and nothing guarantees a win. Bid only what you can afford to lose.
+
+### Quick start
+
+1. **Get $IMD and some ETH for gas.** $IMD trades on Uniswap against ETH. The Play panel can also pay with ETH: it swaps the ETH for $IMD first, then bids.
+2. **Open [Swarm](#/swarm) and connect.** The board shows the game, the countdown shows when the turn closes, and **Bids this turn** lists every bid.
+3. **Pick a move and an amount.** Drag a piece on the board, or tick **Autoplay** to bid on the engine's best move. The panel says whether your bid would be the highest and what each outcome pays.
+4. **Confirm.** The first bid asks for an approval of $IMD, then the bid.
+5. **Claim.** When the turn closes, your Claim key shows what is yours. If your bid won, Claim plays the move as well.
+
+## Turns
+
+A turn is the 24 hours in which people choose White's next move.
+
+- **The first turn** of a game starts with its first bid. Each later turn starts when the swarm's move is played.
+- **The last hour.** A highest bid placed in the last hour of a turn moves its end to an hour after that bid, so the other bidders can always answer.
+- **No bid, no move.** A turn without a bid stays open until someone bids; there is no forfeit.
+
+### Bids
+
+A bid is $IMD on one legal move for White, at least 2 $IMD.
+
+- **The highest bid** leads the turn. To take the lead, a bid must be more than 10% above the highest bid. A smaller bid, or a bid with no move, buys shares straight away.
+- **Outbid.** When a bid is outbid, its whole amount buys shares at that moment. Outbidding your own bid works the same way: the old one becomes shares.
+- **Bids are final.** A bid can't be withdrawn; it either wins the move or becomes shares.
+
+### Closing the turn
+
+When the turn's 24 hours are up, the next transaction closes it: the winner's Claim, any other claim, a bid, or anyone's \`advance()\`. Closing plays the winning bid's move and puts Black's position to the swarm. Nobody needs to keep watch: the move winner's own Claim closes the turn and pays them in one transaction.
+
+### The swarm's move
+
+When the turn closes, SwarmDuel asks the swarm through IMD's oracle (the Intake), paying 0.5 $IMD out of the winning bid's payment. The question gives the agents the game so far, the board and every legal move, and tells them to decide by their own reasoning, with no chess engine or opening book. Once three of them agree, IMD signs the answer, usually within two minutes, and SwarmOracle checks the signature and the question before passing the move on. The next transaction plays it (a bid plays it first), and the next turn's 24 hours start from the moment the answer arrived.
+
+If the swarm can't answer (no agreement, no answer within an hour, or a refused question), the onchain engine plays Black's move at full strength instead, from two blocks after the turn closed, so its move can't be chosen by whoever closes the turn; the next turn starts when it is played. After three failures in a row the swarm is asked only every eighth turn until it answers again; the engine plays the turns in between. Either way the game never stops.
+
+The Lab, below the board, shows every vote of every swarm move, each graded against Stockfish.
+
+## Swarm money
+
+### Winning a move
+
+The move winner pays **20% of their bid, at least 2 $IMD**, and gets the rest back. On top of that:
+
+- **The turn prize:** 1% of the jackpot, in $IMDUEL.
+- **Shares:** the payment buys shares, like any other $IMD that goes in.
+- **The checkmate prize**, if people mate the swarm: one part for every move won in that game.
+
+Example: a winning bid of 10 $IMD pays 2 $IMD and gets 8 $IMD back. A winning bid of 50 $IMD pays 10 $IMD and gets 40 $IMD back.
+
+### Shares and dividends
+
+Every bid that isn't played turns into shares: a bid with no move, a bid too small to lead, and every outbid bid. **Dividends** are 60% of the $IMD that goes into the game: every share bought, every outbid bid and every winning bid's payment. They are paid when each turn closes, to every share in the game at that moment, in proportion to the shares held.
+
+- **Shares get dearer as the game goes on.** Their price rises with the move number and with the $IMD already in the game, so the same amount buys more shares early.
+- **A game's shares earn only from that game.** When a game ends, its shares stop earning; what they earned stays claimable.
+- **Claim any time.** Dividends build up as turns close, and Claim pays them in $IMD.
+
+### The jackpot
+
+The jackpot is $IMDUEL held by SwarmDuel, bought with part of every bid.
+
+- **Each turn** pays 1% of it to the move winner, as the turn prize.
+- **When people checkmate the swarm**, 80% of it is split equally over the White moves played in that game, one part per move, so a move winner gets one part for every move they won. The other 20% stays for the next game.
+- **When the swarm wins, or the game is drawn**, nothing more is paid: the jackpot carries on into the next game.
+
+The jackpot also holds shares of its own in each game (the same as 10 $IMD of shares at the start), so a part of each game's dividends flows into it. Draws follow the main duel's rules: stalemate, too few pieces to mate, a third repetition within the last sixteen half-moves, 60 half-moves without a capture or pawn move, or 200 half-moves in total.
+
+### Where every $IMD goes
+
+Each $IMD that goes in (shares, an outbid bid, or a winning bid's payment after the swarm's question) is split:
+
+| Share | Goes to |
+| --- | --- |
+| 60% | dividends, to the game's shares |
+| 36% | the jackpot, bought as $IMDUEL (33% when the bid came through a ref link) |
+| 3% | stakers, bought as $IMDUEL and sent to the [staking vault](#/docs/staking) |
+| 3% | the referrer, when the bid came through a ref link |
+| 1% | the team |
+
+The $IMDUEL is bought on the main duel's pool, at most 20 $IMD at a time, once a block, by the bids and claims that follow; the $IMD waits in SwarmDuel until then. Each buy is a real main-duel trade, so it can also bid for $IMDUEL's next move there.
+
+### Ref links
+
+Every connected wallet has a **ref link**: the Swarm page with \`?ref=\` and its address. Bids made through it pay 3% of their split to that address, out of the jackpot's part, so the bidder pays nothing extra. A visitor's first ref link counts for 30 days. The page's Referrals card shows what a link has earned and claims it.
+
+## Odds
+
+When people go a long time without a win, the swarm starts the next game with pieces missing: one more piece for every 30 White moves since people last won, up to four.
+
+| Level | The swarm starts without |
+| --- | --- |
+| 0 | nothing (an even game) |
+| 1 | the f7 pawn |
+| 2 | and the b8 knight |
+| 3 | and the a8 rook |
+| 4 | and the queen |
+
+A win by people starts the next game at level 0 again.
+
 <!-- group: Guides -->
 
 ## Trading
@@ -666,10 +972,15 @@ All on Ethereum mainnet.
 | $IMDUEL | [\`0xc012b8Db13C57beCd950eEfB70540e6f973A3C73\`](https://etherscan.io/address/0xc012b8Db13C57beCd950eEfB70540e6f973A3C73) |
 | IMDuelStaking (sIMDUEL) | [\`0x8EA92158b116F835a4961baEFc7e1109562DD723\`](https://etherscan.io/address/0x8EA92158b116F835a4961baEFc7e1109562DD723) |
 | IMDuelFeeRouter | [\`0xf4f9Daec44cC531Abe674184bBe8191024247E23\`](https://etherscan.io/address/0xf4f9Daec44cC531Abe674184bBe8191024247E23) |
+| SwarmDuel | [\`0x7e822CC46D1f19A8cB69d46c954b1aEB72595DD2\`](https://etherscan.io/address/0x7e822CC46D1f19A8cB69d46c954b1aEB72595DD2) |
+| SwarmOracle | [\`0xFbd1f85ea9EA14432AB3aDe43D2FF01BF752CcEA\`](https://etherscan.io/address/0xFbd1f85ea9EA14432AB3aDe43D2FF01BF752CcEA) |
+| SwarmRules | [\`0x61e24d6D133b2924AD0B50e9656c00d24a1b75dA\`](https://etherscan.io/address/0x61e24d6D133b2924AD0B50e9656c00d24a1b75dA) |
+| SwarmLedger | [\`0x88B3D26edfD7C7310fc9864bed8E26552A373385\`](https://etherscan.io/address/0x88B3D26edfD7C7310fc9864bed8E26552A373385) |
+| MainDuelBuyer | [\`0x23D07A8c019a3bE82A7A78f1899723E12e27035E\`](https://etherscan.io/address/0x23D07A8c019a3bE82A7A78f1899723E12e27035E) |
 | Main duel (pool id) | \`0xbb45eacf50b4bd8ce31e0620e14ff6e6b6375d56fce4372d3046f4a02faeae65\` |
 | Launch wallet | \`0x6AA302EFf055259c9Cf177f33Ae3cBA5d4135B23\` |
 
-Deployed through IMD launch 2843 ([job 4098dafa](https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa)) at block 26,322,077. The deployed source is in [the swarm's launch repository](https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json). The staking vault and the fee router were deployed by the launch wallet on 4 November 2026.
+Deployed through IMD launch 2843 ([job 4098dafa](https://explorer.imd.fun/jobs/4098dafa-99b4-4c9f-97e3-430b49ea6afa)) at block 26,322,077. The deployed source is in [the swarm's launch repository](https://github.com/identity-md-launches/launch-2843-launch-imduel-imduel-launch-json). The staking vault and the fee router were deployed by the launch wallet on 4 November 2026, and the Swarm Duel contracts on 13 November 2026 (SwarmDuel at block 26,407,200). The source of every contract here is verified on [Sourcify](https://sourcify.dev).
 
 ## Integrating
 
@@ -706,6 +1017,20 @@ Events: \`GameStarted\`, \`Bid\`, \`Moved\`, \`MatePaid\`, \`GameOver\`, \`DrawT
 
 The fee router: \`collect()\` (anyone) claims the main duel's fees and forwards them; \`admin()\`, \`pending()\` and \`readyAt()\` show who can hand the requester on, to whom and from when (until \`readyAt() + NOTICE\`, then it expires); \`NOTICE\` is 3 days. Events: \`Proposed(next, readyAt)\`, \`HandedOn(next)\`, \`Locked()\`. Errors: \`NotAdmin\`, \`NotReady\` (no proposal, or its notice still running), \`Expired\` (propose again), \`InvalidSetup\` (also for a proposal naming the vault).
 
+**Swarm Duel.** SwarmDuel takes $IMD by approval. A move is a \`uint16\`, \`from * 64 + to\`, with squares numbered a1 = 0 to h8 = 63 (a pawn always promotes to a queen); \`0\` means no move.
+
+| Function | Returns or does |
+| --- | --- |
+| \`deposit(amount, move, referrer)\` | a bid (a move, at least 2 $IMD) or shares (move \`0\`); returns the position id; \`referrer\` is a ref link's address or zero |
+| \`claim(ids)\` | closes a due turn first, then pays the caller's positions: dividends and refunds in $IMD, prizes in $IMDUEL |
+| \`claimReferrals()\` | pays what the caller earned through ref links |
+| \`advance()\` | anyone: plays a waiting swarm or engine move, or closes a due turn |
+| \`game()\`, \`lead()\`, \`jackpot()\` | the board and turn, the highest bid, the jackpot in $IMDUEL |
+| \`owed(id)\`, \`positions(id)\`, \`quote(x)\` | what a position can claim, the position, the shares \`x\` $IMD would buy now |
+| \`launchAt()\`, \`TURN()\`, \`MIN_BID()\`, \`RAISE_PCT()\` | the launch time, 24 hours, 2 $IMD, 10 |
+
+Events: \`Deposited\`, \`Converted\`, \`Settled\`, \`Moved\`, \`Asked\`, \`Answered\`, \`Fallback\`, \`GameOver\`, \`GameStarted\`, \`Claimed\`, \`Bought\`, \`Referrer\`, \`ReferralClaimed\`. Send a deposit or \`advance()\` with plenty of gas (this site uses 9,000,000 and 14,000,000; only the gas used is paid): either may run a buy of $IMDUEL, which is skipped when the gas runs short.
+
 ## Security and risks
 
 
@@ -714,6 +1039,7 @@ The fee router: \`collect()\` (anyone) claims the main duel's fees and forwards 
 - IMD swarm audits: [74895075](https://explorer.imd.fun/jobs/74895075-9f30-49e2-8c89-ec79383f8102) on this code (1 low fixed, 1 info documented) and [6acefe89](https://explorer.imd.fun/jobs/6acefe89-1311-462a-8f78-5697050c327d) on an earlier version (every finding fixed). The launch job audited the code again before deploying; its one change, the \`NotEnoughGas\` check, is in the deployed hook.
 - What the hook holds equals the reward pools plus the burn plus what is owed, in every currency, and every mate pays exactly the smallest of its three limits: checked by invariant tests, symbolic proofs and fuzzing with Foundry and Echidna.
 - The staking vault and the fee router: IMD swarm audit [d944c9f4](https://explorer.imd.fun/jobs/d944c9f4-820f-4a57-87f6-eca2032d2ede) (2 low fixed, 4 info) and the swarm's review in job [6141f96e](https://explorer.imd.fun/jobs/6141f96e-e23e-4cea-85f6-41c05f34602a) (the \`propose()\` low fixed), after four rounds of our own review, the last a red team with flash loans on a mainnet fork. They are covered by invariant tests and symbolic proofs with Halmos (every $IMDUEL the vault holds is staked or in the reserve; time, stakes and unstakes never lower the share value; the permanent stake never leaves), mutation testing and fork tests against the live IMD factory.
+- Swarm Duel: IMD swarm audit [0330ab9f](https://explorer.imd.fun/jobs/0330ab9f-926a-490d-b551-46306454710e) on the deployed code (5 low, 1 info; none needed a change to the deployed contracts), after several rounds of our own reviews; the last, by specialists working on a mainnet fork, found one high issue (a sandwich on the jackpot's buys), fixed by buying at most 20 $IMD at a time. What SwarmDuel holds covers everything it owes, in $IMD and $IMDUEL, after every action: checked by invariant tests against an exact model of the money, with fork tests through IMD's live Intake and the main duel's pool.
 - No owner, pause or upgrade: the hook, the engine and the staking vault are immutable. If the engine fails, a seeded legal move is played at 0% instead, and if that fails too the game ends in a draw, so a trade never breaks. A hostile token can only affect its own duel.
 
 **Known limits.**
@@ -729,5 +1055,10 @@ The fee router: \`collect()\` (anyone) claims the main duel's fees and forwards 
 - **Staking rewards depend on fees.** The reserve only refills while the main duel trades. Without new fees it keeps releasing 1% of what is left each day, so rewards shrink but never stop at once, and the share value never falls.
 - **Staking is not a hedge.** A stake is counted in $IMDUEL; its dollar value moves with the $IMDUEL price.
 - **The fee router's admin.** Until \`lock()\` is called, the admin can redirect the main duel's 1% to a new address, after a public 3-day notice. It has no power over the vault or anything staked.
-`,toc:[{group:`Overview`,sections:[{id:`introduction`,title:`Introduction`,sub:[]},{id:`quick-start`,title:`Quick start`,sub:[]}]},{group:`How it works`,sections:[{id:`how-a-game-works`,title:`How a game works`,sub:[{id:`teams`,title:`Teams`},{id:`bidding`,title:`Bidding`},{id:`playing-the-move`,title:`Playing the move`},{id:`game-end`,title:`Game end`}]},{id:`strength`,title:`Strength`,sub:[]},{id:`checkmate-rewards`,title:`Checkmate rewards`,sub:[{id:`withdrawing`,title:`Withdrawing`}]},{id:`fees-and-reward-pools`,title:`Fees and reward pools`,sub:[]},{id:`imduel`,title:`$IMDUEL`,sub:[{id:`distribution`,title:`Distribution`},{id:`burn`,title:`Burn`}]},{id:`staking`,title:`Staking`,sub:[{id:`shares`,title:`Shares`},{id:`the-reward-reserve`,title:`The reward reserve`},{id:`apr`,title:`APR`},{id:`the-permanent-stake`,title:`The permanent stake`},{id:`the-fee-router`,title:`The fee router`}]},{id:`gas`,title:`Gas`,sub:[]}]},{group:`Guides`,sections:[{id:`trading`,title:`Trading`,sub:[]},{id:`creating-a-duel`,title:`Creating a duel`,sub:[]},{id:`staking-and-unstaking`,title:`Staking and unstaking`,sub:[]},{id:`profiles-and-leaderboard`,title:`Profiles and leaderboard`,sub:[]}]},{group:`Reference`,sections:[{id:`contracts`,title:`Contracts`,sub:[]},{id:`integrating`,title:`Integrating`,sub:[]},{id:`security-and-risks`,title:`Security and risks`,sub:[]}]}]},v=(r,i)=>{let a=i.params.section;t(r,e`<div class="overview wrap">${s(`Docs`,{href:`#/`,label:`Home`},{lede:`How IMDuel works: the game, the money, the site and the contracts.`,end:n({label:`Find a duel`,href:`#/duels`,tone:`ink`,size:`sm`}),className:`overview-title`})}
+- **The swarm is AI agents.** It plays real chess but can miss tactics, and nothing about its strength is guaranteed either way. Players may use any tool; the swarm is asked not to.
+- **Swarm Duel depends on IMD.** If IMD's agents don't answer within an hour, the onchain engine plays Black's move instead, so a game never stops; the swarm itself can't be replaced mid-game.
+- **SwarmDuel's deployer.** The launch wallet can name a new oracle for the swarm's questions, after a public 3-day notice (\`OracleProposed\`), taking effect only when a new game starts; or give up that power for good with \`renounce()\`. It has no power over funds, bids or the board.
+- **Swarm shares earn only from their own game.** A game that ends quickly leaves its shares little time to earn.
+- **The jackpot trails the bids.** Its $IMDUEL is bought at most 20 $IMD at a time, so after a busy turn part of it is still $IMD waiting to be bought.
+`,toc:[{group:`Overview`,sections:[{id:`introduction`,title:`Introduction`,sub:[]},{id:`quick-start`,title:`Quick start`,sub:[]}]},{group:`How it works`,sections:[{id:`how-a-game-works`,title:`How a game works`,sub:[{id:`teams`,title:`Teams`},{id:`bidding`,title:`Bidding`},{id:`playing-the-move`,title:`Playing the move`},{id:`game-end`,title:`Game end`}]},{id:`strength`,title:`Strength`,sub:[]},{id:`checkmate-rewards`,title:`Checkmate rewards`,sub:[{id:`withdrawing`,title:`Withdrawing`}]},{id:`fees-and-reward-pools`,title:`Fees and reward pools`,sub:[]},{id:`imduel`,title:`$IMDUEL`,sub:[{id:`distribution`,title:`Distribution`},{id:`burn`,title:`Burn`}]},{id:`staking`,title:`Staking`,sub:[{id:`shares`,title:`Shares`},{id:`the-reward-reserve`,title:`The reward reserve`},{id:`apr`,title:`APR`},{id:`the-permanent-stake`,title:`The permanent stake`},{id:`the-fee-router`,title:`The fee router`}]},{id:`gas`,title:`Gas`,sub:[]}]},{group:`Swarm Duel`,sections:[{id:`swarm-duel`,title:`Swarm Duel`,sub:[{id:`quick-start-2`,title:`Quick start`}]},{id:`turns`,title:`Turns`,sub:[{id:`bids`,title:`Bids`},{id:`closing-the-turn`,title:`Closing the turn`},{id:`the-swarm-s-move`,title:`The swarm's move`}]},{id:`swarm-money`,title:`Swarm money`,sub:[{id:`winning-a-move`,title:`Winning a move`},{id:`shares-and-dividends`,title:`Shares and dividends`},{id:`the-jackpot`,title:`The jackpot`},{id:`where-every-imd-goes`,title:`Where every $IMD goes`},{id:`ref-links`,title:`Ref links`}]},{id:`odds`,title:`Odds`,sub:[]}]},{group:`Guides`,sections:[{id:`trading`,title:`Trading`,sub:[]},{id:`creating-a-duel`,title:`Creating a duel`,sub:[]},{id:`staking-and-unstaking`,title:`Staking and unstaking`,sub:[]},{id:`profiles-and-leaderboard`,title:`Profiles and leaderboard`,sub:[]}]},{group:`Reference`,sections:[{id:`contracts`,title:`Contracts`,sub:[]},{id:`integrating`,title:`Integrating`,sub:[]},{id:`security-and-risks`,title:`Security and risks`,sub:[]}]}]},v=(r,i)=>{let a=i.params.section;t(r,e`<div class="overview wrap">${s(`Docs`,{href:`#/`,label:`Home`},{lede:`How IMDuel works: the game, the money, the site and the contracts.`,end:n({label:`Find a duel`,href:`#/duels`,tone:`ink`,size:`sm`}),className:`overview-title`})}
     ${l(_,a)}</div>`);let o=r.querySelector(`[data-walkthrough]`);o&&t(o,h());let c=o?g(o.querySelector(`.walkthrough`)):void 0,d=u(r,_,a);return()=>{d(),c?.()}};export{v as default};

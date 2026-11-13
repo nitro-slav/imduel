@@ -1,4 +1,4 @@
-import{C as e,T as t,n,s as r}from"./controls-KpvRSo0d.js";import{it as i,lt as a}from"./discovery-C9aQzwXW.js";import{t as o}from"./who-I5Hq5frM.js";var s=(t,n)=>e`<button type="button" class="tape-move" data-seek="${n}"${t.title?e` title="${t.title}"`:``}>
+import{C as e,T as t,n,s as r}from"./controls-KpvRSo0d.js";import{it as i,lt as a}from"./discovery-C9aQzwXW.js";import{t as o}from"./who-D-iTfqI0.js";var s=(t,n)=>e`<button type="button" class="tape-move" data-seek="${n}"${t.title?e` title="${t.title}"`:``}>
   <span><small>${t.label}</small> <b>${t.san}</b></span><em${t.owed?e` class="owed"`:``}>${t.payout??``}</em></button>`;function c(r){t(r,e`<div class="board-keys">
     <div class="board-keys-group" role="group" aria-label="Move through the game">
       ${n({label:a.left,title:`Previous move`,size:`sm`,data:{step:`-1`}})}
